@@ -91,3 +91,109 @@ Ganará:
 ```
 
 Porque la línea de comandos tiene más prioridad.
+
+## 3. Archivos de variables
+
+### vars_files
+
+```yaml
+---
+- hosts: web
+
+  vars_files:
+    - variables.yml
+```
+
+variables.yml
+
+```yaml
+usuario: alba
+puerto: 8080
+```
+
+Uso:
+
+```yaml
+{{ usuario }}
+```
+
+## 4. Templates con Jinja2
+
+Uno de los conceptos más importantes.
+
+### Archivo plantilla
+
+```jinja2
+Servidor: {{ inventory_hostname }}
+
+Puerto: {{ puerto }}
+```
+
+Guardar:
+
+```bash
+config.j2
+```
+
+### Playbook
+
+```yaml
+- name: Generar configuración
+  template:
+    src: config.j2
+    dest: /tmp/config.txt
+```
+
+Resultado:
+
+```yaml
+Servidor: web01
+Puerto: 8080
+```
+
+Magia negra corporativa aceptada por la industria.
+
+## 5. Roles
+
+Cuando el proyecto crece, aparecen los roles.
+
+Crear:
+
+```bash
+ansible-galaxy init nginx
+```
+
+Estructura:
+
+```bash
+nginx/
+
+├── defaults
+├── files
+├── handlers
+├── meta
+├── tasks
+├── templates
+├── tests
+└── vars
+```
+
+### tasks/main.yml
+
+```yaml
+---
+- name: Instalar nginx
+  apt:
+    name: nginx
+    state: present
+```
+
+### Uso del rol
+
+```yaml
+---
+- hosts: web
+
+  roles:
+    - nginx
+```
