@@ -197,3 +197,54 @@ nginx/
   roles:
     - nginx
 ```
+
+## 6. Tags
+
+Permiten ejecutar tareas concretas.
+
+```yaml
+tasks:
+
+- name: Instalar nginx
+  apt:
+    name: nginx
+    state: present
+  tags:
+    - install
+
+- name: Reiniciar nginx
+  service:
+    name: nginx
+    state: restarted
+  tags:
+    - restart
+```
+
+Ejecutar:
+
+```bash
+ansible-playbook web.yml --tags install
+```
+
+## 7. Register
+
+Guarda resultados de una tarea.
+
+```yaml
+- name: Obtener hostname
+  command: hostname
+  register: resultado
+```
+
+Ver contenido:
+
+```yaml
+- debug:
+    var: resultado.stdout
+```
+
+Resultado:
+
+```yaml
+web01
+```
